@@ -26,6 +26,52 @@ const ViewingControls = createReactClass({
         viewState: PropTypes.object.isRequired
     },
 
+    getInitialState() {
+        return {
+            controlWidths: [null, null, null, null, null]
+        };
+    },
+
+    componentWillMount() {
+        this.zoomToRef = null;
+        this.aboutRef = null;
+        this.splitRef = null;
+        this.exportRef = null;
+        this.removeRef = null;
+    },
+
+    componentDidMount() {
+        // Total width of controls
+        const totalWidth = 318;
+        const controls = [this.zoomToRef, this.aboutRef, this.splitRef, this.exportRef, this.removeRef];
+        const rawControlWidths = controls.map(c => c != null ? c.width : 0);
+        const sumWidths = rawControWidths.reduce((sum, w) => sum + w, 0);
+        const widthDiff = 318-sumWidths;
+        if (widthDiff < 0) {
+            return;
+        }
+        const numActiveControls = controls.reduce((count, c) => count + (c != null) ? 1 : 0);
+        // Add 2 bits of padding between each control, hence 2*(controls-1)
+        const padding = widthDiff/(2*(numActiveControls-1));
+        const activeControlIndices = controls.map((c, i) => (c != null) ? i : null).filter(i => i != null);
+        const controlWidths = rawControlWidths.slice();
+        // Iterate over control boundaries and add padding to left and right controls
+        activeControlIndices.slice(1).forEach((rightControlIndex, i) => {
+            const leftControlIndex = activeControlIndices[i];
+            controlWidths[leftControlIndex] += padding;
+            controlWidths[leftControlIndex] += padding;
+        });
+        
+        // Produce a percentage with 1 decimal place
+        const producePercent = (x, total) => `${Math.round(1000*(x/total))/10}%`;
+
+        const widthsPercent = controlWidths
+            .map(w => producePercent(w, totalWidth));
+        if (widthsPercent.some((w, i) => w !== this.state.controlWidths[i])) {
+            this.setState({controlWidths: widthsPercent});
+        }
+    },
+
     removeFromMap() {
         this.props.item.isEnabled = false;
     },
@@ -89,7 +135,7 @@ const ViewingControls = createReactClass({
     },
 
     exportData() {
-        const item = this.props.item;
+        const item = this.props.item; 
         item.exportData();
     },
 
@@ -101,22 +147,32 @@ const ViewingControls = createReactClass({
         return (
             <ul className={Styles.control}>
                 <If condition={item.canZoomTo}>
-                    <li className={classNames(Styles.zoom, classList)}><button type='button' onClick={this.zoomTo} title="Zoom to extent" className={Styles.btn}>Zoom To Extent</button></li>
+                    <li className={classNames(Styles.zoom, classList)} ref={c => this.zoomToRef = c}>
+                        <button type='button' onClick={this.zoomTo} title="Zoom to extent" className={Styles.btn}>Zoom To Extent</button>
+                    </li>
                 </If>
                 <If condition={item.tableStructure && item.tableStructure.sourceFeature}>
-                    <li className={classNames(Styles.zoom, classList)}><button type='button' onClick={this.openFeature} title="Zoom to data" className={Styles.btn}>Zoom To</button></li>
+                    <li className={classNames(Styles.zoom, classList)} ref={c => this.zoomToRef = c}>
+                        <button type='button' onClick={this.openFeature} title="Zoom to data" className={Styles.btn}>Zoom To</button>
+                    </li>
                 </If>
                 <If condition={item.showsInfo}>
-                    <li className={classNames(Styles.info, classList)}><button type='button' onClick={this.previewItem} className={Styles.btn} title='info'>About This Data</button></li>
+                    <li className={classNames(Styles.info, classList)} ref={c => this.aboutRef = c}>
+                        <button type='button' onClick={this.previewItem} className={Styles.btn} title='info'>About This Data</button>
+                    </li>
                 </If>
                 <If condition={canSplit}>
-                    <li className={classNames(Styles.split, classList)}><button type='button' onClick={this.splitItem} title="Duplicate and show splitter" className={Styles.btn}>Split</button></li>
+                    <li className={classNames(Styles.split, classList)} ref={c => this.splitRef = c}>
+                        <button type='button' onClick={this.splitItem} title="Duplicate and show splitter" className={Styles.btn}>Split</button>
+                    </li>
                 </If>
                 <If condition={defined(item.linkedWcsUrl)}>
                     {/* WIP: Fix styles */}
-                    <li className={classNames(Styles.info, classList)}><button type='button' onClick={this.exportData} className={Styles.btn} title='Export map data'>Export</button></li>
+                    <li className={classNames(Styles.info, classList)} ref={c => this.splitRef = c}>
+                        <button type='button' onClick={this.exportData} className={Styles.btn} title='Export map data'>Export</button>
+                    </li>
                 </If>
-                <li className={classNames(Styles.remove, classList)}>
+                <li className={classNames(Styles.remove, classList)} ref={c => this.removeRef = c}>
                     <button type='button' onClick={this.removeFromMap} title="Remove this data" className={Styles.btn}>
                         Remove <Icon glyph={Icon.GLYPHS.remove}/>
                     </button>
