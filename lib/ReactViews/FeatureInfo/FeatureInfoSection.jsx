@@ -24,6 +24,7 @@ import propertyGetTimeValues from '../../Core/propertyGetTimeValues';
 import parseCustomMarkdownToReact from '../Custom/parseCustomMarkdownToReact';
 
 import Styles from './feature-info-section.scss';
+import FeatureInfoExperimentStarter from './FeatureInfoExperimentStarter';
 
 // We use Mustache templates inside React views, where React does the escaping; don't escape twice, or eg. " => &quot;
 Mustache.escape = function(string) {
@@ -236,6 +237,13 @@ const FeatureInfoSection = createReactClass({
                                     <FeatureInfoDownload key='download'
                                         viewState={this.props.viewState}
                                         data={reactInfo.downloadableData}
+                                        name={baseFilename} />
+                                </If>
+                                <If condition={!this.props.printView}>
+                                    <FeatureInfoExperimentStarter key='experimentStarter'
+                                        viewState={this.props.viewState}
+                                        data={reactInfo.downloadableData}
+                                        catalogItem={this.props.catalogItem}
                                         name={baseFilename} />
                                 </If>
                             </When>
@@ -635,6 +643,34 @@ function getTimeSeriesChartContext(catalogItem, feature, getChartDetails) {
 }
 
 /**
+ * Get parameters that should be exposed to the template, to help show a timeseries chart of the feature data.
+ * @private
+ */
+// function getTimeSeriesChartContextFromNcWMS(catalogItem, feature, currentTime) {
+//     // Only show it as a line chart if charts are available.
+//     if (defined(catalogItem) && CustomComponents.isRegistered('chart')) {
+//         const distinguishingId = catalogItem.dataViewId;
+//         const featureId = defined(distinguishingId) ? (distinguishingId + '--' + feature.id) : feature.id;
+
+//         const result = {
+//             xName: chartDetails.xName.replace(/\"/g, ''),
+//             yName: chartDetails.yName.replace(/\"/g, ''),
+//             title: chartDetails.yName,
+//             id: featureId.replace(/\"/g, ''),
+//             data: chartDetails.csvData.replace(/\\n/g, '\\n'),
+//             units: chartDetails.units.join(',').replace(/\"/g, '')
+//         };
+
+//         const xAttribute = 'x-column="' + result.xName + '" ';
+//         const yAttribute = 'y-column="' + result.yName + '" ';
+//         const idAttribute = 'id="' + result.id + '" ';
+//         const unitsAttribute = 'column-units = "' + result.units + '" ';
+//         result.chart = '<chart ' + xAttribute + yAttribute + unitsAttribute + idAttribute + '>' + result.data + '</chart>';
+//         return result;
+//     }
+// }
+
+/**
  * Wrangle the provided feature data into more convenient forms.
  * @private
  * @param  {ReactClass} that The FeatureInfoSection.
@@ -659,11 +695,16 @@ function getInfoAsReactComponent(that) {
     let timeSeriesChartTitle;
 
     if (defined(templateData)) {
-        const timeSeriesChartContext = getTimeSeriesChartContext(that.props.catalogItem, that.props.feature, templateData._terria_getChartDetails);
-        if (defined(timeSeriesChartContext)) {
-            timeSeriesChart = parseCustomMarkdownToReact(timeSeriesChartContext.chart, context);
-            timeSeriesChartTitle = timeSeriesChartContext.title;
-        }
+        // let timeSeriesChartContext = getTimeSeriesChartContext(that.props.catalogItem, that.props.feature, templateData._terria_getChartDetails);
+
+        // if (!defined(timeSeriesChartContext) && that.props.catalogItem.isNcWMS) {
+        //     timeSeriesChartContext = getTimeSeriesChartContextFromNcWMS(that.props.catalogItem, that.props.feature, templateData.time);
+        // }
+
+        // if (defined(timeSeriesChartContext)) {
+        //     timeSeriesChart = parseCustomMarkdownToReact(timeSeriesChartContext.chart, context);
+        //     timeSeriesChartTitle = timeSeriesChartContext.title;
+        // }
     }
     const showRawData = !that.hasTemplate() || that.state.showRawData;
     let rawDataHtml;
