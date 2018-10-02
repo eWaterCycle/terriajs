@@ -111,7 +111,7 @@ const ExplorerWindow = createReactClass({
                     <button type='button'
                             onClick={this.close}
                             className={Styles.btnCloseModal}
-                            title="Close data panel"
+                            title="Close model instance panel"
                             data-target="close-modal">
                         Done
                     </button>

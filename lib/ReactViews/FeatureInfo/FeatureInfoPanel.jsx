@@ -123,7 +123,7 @@ const FeatureInfoPanel = createReactClass({
             // if clicking on somewhere that has no data
             return "No data is available here - try another location.";
         } else {
-            return "Click 'Add Data' to add data to the map.";
+            return "Click 'Add Model instance' to add model insstance to the map.";
         }
     },
 
@@ -228,7 +228,7 @@ const FeatureInfoPanel = createReactClass({
                         Feature Information
                     </button>
                     <button type='button' onClick={ this.close } className={Styles.btnCloseFeature}
-                            title="Close data panel">
+                            title="Close model instance panel">
                         <Icon glyph={Icon.GLYPHS.close}/>
                     </button>
                 </div>}

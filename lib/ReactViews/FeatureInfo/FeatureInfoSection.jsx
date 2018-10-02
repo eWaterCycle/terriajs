@@ -155,7 +155,7 @@ const FeatureInfoSection = createReactClass({
             return Mustache.render(template.name, this.getPropertyValues());
         }
         const feature = this.props.feature;
-        return (feature && feature.name) || 'Site Data';
+        return (feature && feature.name) || 'Model instance';
     },
 
     isFeatureTimeVarying(feature) {
@@ -215,7 +215,7 @@ const FeatureInfoSection = createReactClass({
                     <section className={Styles.content}>
                     <If condition={!this.props.printView && this.hasTemplate()}>
                         <button type="button" className={Styles.rawDataButton} onClick={this.toggleRawData}>
-                            {this.state.showRawData ? 'Show Curated Data' : 'Show Raw Data'}
+                            {this.state.showRawData ? 'Show Curated Model instance' : 'Show Raw Model instance'}
                         </button>
                     </If>
                     <div>

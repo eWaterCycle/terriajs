@@ -67,7 +67,7 @@ const DataPreview = createReactClass({
                     </When>
                     <Otherwise>
                         <div className={Styles.placeholder}>
-                            <p>Select a dataset to see a preview</p>
+                            <p>Select a model to see a preview</p>
                             <p>- OR -</p>
                             <button className={Styles.btnBackToMap} onClick={this.backToMap}>Go to the map</button>
                         </div>

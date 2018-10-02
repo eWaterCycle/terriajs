@@ -107,7 +107,7 @@ const DataPreviewMap = createReactClass({
         this.lastPreviewedCatalogItem = previewedCatalogItem;
 
         this.setState({
-            previewBadgeText: 'DATA PREVIEW LOADING...'
+            previewBadgeText: 'MODEL INSTANCE PREVIEW LOADING...'
         });
 
         this.isZoomedToExtent = false;
@@ -158,7 +158,7 @@ const DataPreviewMap = createReactClass({
                             });
                         } else if (that.removePreviewFromMap) {
                             this.setState({
-                                previewBadgeText: 'DATA PREVIEW'
+                                previewBadgeText: 'MODEL INSTANCE PREVIEW'
                             });
                         } else {
                             this.setState({
@@ -177,7 +177,7 @@ const DataPreviewMap = createReactClass({
                 console.error(err);
 
                 this.setState({
-                    previewBadgeText: 'DATA PREVIEW ERROR'
+                    previewBadgeText: 'MODEL INSTANCE PREVIEW ERROR'
                 });
             });
         }

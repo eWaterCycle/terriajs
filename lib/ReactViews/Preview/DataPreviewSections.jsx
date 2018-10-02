@@ -17,7 +17,7 @@ const DEFAULT_SECTION_ORDER = [
     'Disclaimer',
     'Description',
     'Data Description',
-    'Dataset Description',
+    'Model Description',
     'Service Description',
     'Resource Description',
     'Licence',

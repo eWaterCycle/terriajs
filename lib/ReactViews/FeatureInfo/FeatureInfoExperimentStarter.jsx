@@ -82,27 +82,31 @@ const FeatureInfoExperimentStarter = createReactClass({
     render() {
         // const catalogItem = this.props.catalogItem;
 
-        if (DataUri.checkCompatibility()) {
-            return (
-                <div className={'experiment-description'}>
-                    <span className={'experiment-description-title'}>Experiment description</span>
-                    {/* <Choose>
-                        <When condition={defined(startDate)}>
-                            <table className={'experiment-description-date-table'}>
-                                <tbody>
-                                    <tr><th>start date</th><th>end date</th><th>timesteps</th></tr>
-                                    <tr><td>{startDate.toString()}</td><td>{endDate.toString()}</td><td>{timesteps}</td></tr>
-                                </tbody>
-                            </table>
-                        </When>
-                        <When condition={catalogItem.isNcWMS}>
-                            <span className={'models-selector-header'}>Please select a model</span>
-                        </When>
-                    </Choose> */}
+        if (this.props.data.model) {
+            if (DataUri.checkCompatibility()) {
+                return (
+                    <div className={'experiment-description'}>
+                        <span className={'experiment-description-title'}>Experiment description</span>
+                        {/* <Choose>
+                            <When condition={defined(startDate)}>
+                                <table className={'experiment-description-date-table'}>
+                                    <tbody>
+                                        <tr><th>start date</th><th>end date</th><th>timesteps</th></tr>
+                                        <tr><td>{startDate.toString()}</td><td>{endDate.toString()}</td><td>{timesteps}</td></tr>
+                                    </tbody>
+                                </table>
+                            </When>
+                            <When condition={catalogItem.isNcWMS}>
+                                <span className={'models-selector-header'}>Please select a model</span>
+                            </When>
+                        </Choose> */}
 
-                    <button type='submit' title="Start Experiment" className={Styles.btn} onClick={this.startExperiment}>Start Experiment</button>
-                </div>
-            );
+                        <button type='submit' title="Start Experiment" className={Styles.btn} onClick={this.startExperiment}>Start Experiment</button>
+                    </div>
+                );
+            } else {
+                return null;
+            }
         } else {
             return null;
         }
