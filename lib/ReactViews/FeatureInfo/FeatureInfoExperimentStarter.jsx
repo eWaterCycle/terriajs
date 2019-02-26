@@ -10,6 +10,16 @@ import DataUri from '../../Core/DataUri';
 
 import Styles from './feature-info-experiment-starter.scss';
 
+function getCredentials() {
+    const username = localStorage.getItem('ewatercycle.launcher.username');
+    const password = localStorage.getItem('ewatercycle.launcher.password');
+    if (username && password) {
+        return username + ':' + password;
+    } else {
+        return '';
+    }
+}
+
 const FeatureInfoExperimentStarter = createReactClass({
     propTypes: {
         data: PropTypes.object.isRequired,
@@ -59,13 +69,14 @@ const FeatureInfoExperimentStarter = createReactClass({
                 "plotting": data.plotting
             }
         };
-
+        const creds = getCredentials();
+        const authorization = 'basic ' + btoa(creds);        
         const urlPromise = fetch('https://hub.ewatercycle2-nlesc.surf-hosted.nl:8888/bmi', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'basic c3R1ZGVudDE6VXY2YWV4b3lvNEFo'
+                'Authorization': authorization
             },
             body: JSON.stringify(request)
         }).then(response => response.json());
@@ -84,6 +95,7 @@ const FeatureInfoExperimentStarter = createReactClass({
 
         if (this.props.data.model) {
             if (DataUri.checkCompatibility()) {
+                const hasCreds = getCredentials();
                 return (
                     <div className={'experiment-description'}>
                         <span className={'experiment-description-title'}>Experiment description</span>
@@ -101,7 +113,7 @@ const FeatureInfoExperimentStarter = createReactClass({
                             </When>
                         </Choose> */}
 
-                        <button type='submit' title="Start Experiment" className={Styles.btn} onClick={this.startExperiment}>Start Experiment</button>
+                        <button type='submit' disabled={!hasCreds} title={hasCreds ? "Start Experiment" : "Login to be able to start an experiment"} className={Styles.btn} onClick={this.startExperiment}>Start Experiment</button>
                     </div>
                 );
             } else {
