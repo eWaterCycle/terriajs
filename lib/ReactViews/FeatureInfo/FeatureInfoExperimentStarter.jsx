@@ -66,12 +66,12 @@ const FeatureInfoExperimentStarter = createReactClass({
                 "config": data.config,
                 "datafiles": data.datafiles,
                 "model": data.model,
-                "plotting": data.plotting
+                "assessment": data.assessment
             }
         };
         const creds = getCredentials();
         const authorization = 'basic ' + btoa(creds);        
-        const urlPromise = fetch('https://hub.ewatercycle2-nlesc.surf-hosted.nl:8888/bmi', {
+        const urlPromise = fetch('https://hub.ewatercycle2-nlesc.surf-hosted.nl:8888/assessment', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
